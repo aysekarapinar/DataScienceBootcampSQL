@@ -1,53 +1,116 @@
-# SQL Queries
+# SQL Sorguları ve Açıklamaları
 
-Bu depo, çeşitli SQL sorgularını içerir. Sorgular, veri çekme, veri manipülasyonu ve veritabanı üzerinde işlem yapma gibi temel SQL işlemleri için örnekler sunmaktadır.
+Bu belge, çeşitli SQL sorgularını ve her bir sorgunun işlevini açıklamaktadır. SQL dilini öğrenenler ve kullananlar için kapsamlı bir kaynak sunar.
 
-## Yaptığım Çalışmalar
+## 1. Çalışanların FirstName, LastName ve Salary Bilgilerini Getirme
 
-1. **Çalışanların Bilgilerini Getirme:**
-   - Çalışanların `FirstName`, `LastName` ve `Salary` bilgilerini getirerek basit veri çekme işlemi gerçekleştirdim.
+```sql
+SELECT FirstName, LastName, Salary FROM employees;
+```
 
-2. **Benzersiz Departman Adlarını Listeleme:**
-   - `DISTINCT` komutunu kullanarak, departmanlar tablosundan tekrarlayan departman isimlerini kaldırdım ve yalnızca benzersiz departmanları listeledim.
+- **SELECT**: Veritabanından belirli sütunları seçmek için kullanılır.
+- **FROM**: Verilerin çekileceği tabloyu belirtir.
 
-3. **IT Departmanındaki Çalışanları Getirme:**
-   - `JOIN` komutuyla iki tabloyu birleştirerek, sadece IT departmanında çalışan kişilerin bilgilerini listeledim.
+Bu sorgu, "employees" (çalışanlar) tablosundan çalışanların ad, soyad ve maaş bilgilerini getirir.
 
-4. **Çalışanları Maaşlarına Göre Sıralama:**
-   - `ORDER BY` komutuyla çalışanları maaşlarına göre büyükten küçüğe sıraladım.
+## 2. Çalışanların Çalıştıkları Departmanları Benzersiz Olarak Listeleme
 
-5. **Tam İsim Kolonu Oluşturma:**
-   - `FirstName` ve `LastName` sütunlarını birleştirerek yeni bir `FullName` kolonu oluşturup, çalışanların tam isimlerini listeledim.
+```sql
+SELECT DISTINCT DepartmentName FROM departments;
+```
 
-## Kullanım
+- **DISTINCT**: Yinelenen (tekrarlayan) kayıtları kaldırır ve sadece benzersiz (farklı) değerleri döndürür.
 
-1. Bu repository'yi klonlayın:
-    ```bash
-    git clone https://github.com/your-username/sql-queries.git
-    ```
+Bu sorgu, "departments" tablosunda tekrarlanmayan tüm departman adlarını listeler.
 
-2. SQL sorgularını istediğiniz veritabanı yönetim sistemine (MySQL, PostgreSQL, SQLite vb.) uygulayın.
+## 3. Sadece IT Departmanında Çalışanların Bilgilerini Getirme
 
-3. Sorguları kendi veritabanı yapınıza göre özelleştirebilirsiniz.
+```sql
+SELECT e.EmployeeID, e.FirstName, e.LastName, e.Age, e.Salary, e.JoinDate, d.DepartmentName
+FROM Employees e
+JOIN Departments d ON e.DepartmentID = d.DepartmentID
+WHERE d.DepartmentName = 'IT';
+```
 
-## Katkı
+- **JOIN**: İki tabloyu birleştirir.
+- **ON**: Hangi alanlar üzerinden birleştirme yapılacağını belirtir.
+- **WHERE**: Belirli bir koşula göre filtreleme yapar.
 
-Bu projeye katkıda bulunmak isterseniz:
-1. Repository'yi fork edin.
-2. Yeni bir branch oluşturun (`git checkout -b yeni-sorgu`).
-3. Yeni sorgunuzu ve açıklamanızı ekleyin.
-4. Değişikliklerinizi commit edin (`git commit -am 'Yeni SQL sorgusu ekle'`).
-5. Branch'ınızı push edin (`git push origin yeni-sorgu`).
-6. Yeni bir Pull Request oluşturun.
+Bu sorgu, "Employees" ve "Departments" tablolarını birleştirerek sadece "IT" departmanında çalışan kişilerin bilgilerini getirir.
 
-## Lisans
+## 4. Çalışanları Maaşlarına Göre Büyükten Küçüğe Sıralama
 
-Bu proje MIT Lisansı altında lisanslanmıştır - [LICENSE](LICENSE) dosyasına bakabilirsiniz.
+```sql
+SELECT * FROM employees 
+ORDER BY salary DESC;
+```
 
-## İletişim
+- **ORDER BY**: Kayıtları belirli bir sütuna göre sıralar.
+- **DESC**: Azalan (büyükten küçüğe) sıralama yapar.
 
-Herhangi bir sorunuz veya öneriniz varsa, benimle iletişime geçebilirsiniz:
+Bu sorgu, "employees" tablosundaki tüm çalışanları maaşlarına göre azalan sırada listeler.
 
-- E-posta: ayseozlemkarapinar28@gmail.com
-- GitHub: [@aysekarapinar](https://github.com/aysekarapinar)
+## 5. Çalışanların Ad ve Soyadlarını Birleştirerek Yeni Bir Kolon Oluşturma
+
+```sql
+SELECT FirstName || ' ' || LastName AS FullName FROM employees;
+```
+
+- **||**: String (metin) ifadeleri birleştirmek için kullanılır.
+- **AS**: Yeni oluşturulan kolona takma ad (alias) verir.
+
+Bu sorgu, çalışanların ad ve soyadlarını birleştirerek "FullName" adında yeni bir sütun oluşturur.
+
+## 6. NULL Olan Kayıtların Sayısını Bulma (Invoice Tablosu)
+
+```sql
+SELECT COUNT(*) AS null_kayit_sayisi
+FROM Invoice;
+```
+
+- **COUNT**: Belirtilen koşula uyan satırların sayısını döndürür.
+
+Bu sorgu, "Invoice" tablosunda bulunan tüm kayıtların sayısını getirir. Sonuçta dönen değer 412'dir.
+
+## 7. Total Değerlerinin İki Katını Gösterme ve Karşılaştırma
+
+```sql
+SELECT 
+    total AS eski_total,
+    total * 2 AS yeni_total
+FROM 
+    Invoice
+ORDER BY 
+    yeni_total DESC; 
+```
+
+- **total AS eski_total**: Mevcut total değerini "eski_total" adıyla gösterir.
+- **total * 2 AS yeni_total**: Total değerinin iki katını hesaplayıp "yeni_total" sütunu oluşturur.
+- **ORDER BY yeni_total DESC**: Sonuçları "yeni_total" sütununa göre azalan sırayla listeler.
+
+Bu sorgu, faturaların toplam değerlerinin iki katını hesaplar ve eski değerle birlikte gösterir. Sonuçlar yeni toplam değere göre büyükten küçüğe sıralanır.
+
+## 8. Adres Kolonundaki Verileri Parçalayarak Yeni Kolon Oluşturma
+
+```sql
+SELECT 
+    LEFT(billing_address, 3) || RIGHT(billing_address, 4) AS "Açık Adres",
+    invoice_date,
+    billing_address
+FROM 
+    Invoice
+WHERE 
+    EXTRACT(YEAR FROM invoice_date) = 2013 
+    AND EXTRACT(MONTH FROM invoice_date) = 8;
+```
+
+- **LEFT()**: Metnin başından belirtilen kadar karakter alır.
+- **RIGHT()**: Metnin sonundan belirtilen kadar karakter alır.
+- **EXTRACT()**: Tarih sütunlarından belirli bir bileşeni (yıl, ay vb.) çıkarır.
+
+Bu sorgu, fatura adreslerinin ilk 3 ve son 4 karakterini birleştirerek yeni bir "Açık Adres" sütunu oluşturur ve yalnızca 2013 yılı Ağustos ayındaki kayıtları getirir.
+
+---
+
+Bu belge, SQL sorgularınızı anlamak ve kullanmak için kapsamlı bir rehber niteliğindedir. Eklemek istediğiniz başka sorgular veya detaylar olursa güncelleyebilirsiniz.
 
