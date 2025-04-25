@@ -108,9 +108,54 @@ WHERE
 - **RIGHT()**: Metnin sonundan belirtilen kadar karakter alır.
 - **EXTRACT()**: Tarih sütunlarından belirli bir bileşeni (yıl, ay vb.) çıkarır.
 
+
 Bu sorgu, fatura adreslerinin ilk 3 ve son 4 karakterini birleştirerek yeni bir "Açık Adres" sütunu oluşturur ve yalnızca 2013 yılı Ağustos ayındaki kayıtları getirir.
 
 ---
 
-Bu belge, SQL sorgularınızı anlamak ve kullanmak için kapsamlı bir rehber niteliğindedir. Eklemek istediğiniz başka sorgular veya detaylar olursa güncelleyebilirsiniz.
 
+# 🎓 Çevrimiçi Eğitim Platformu Veritabanı Tasarımı (PostgreSQL)
+
+Bu proje, bir çevrimiçi eğitim platformu için PostgreSQL kullanılarak geliştirilen veritabanı şemasıdır. Proje kapsamında kullanıcılar sisteme kayıt olabilir, eğitimlere katılabilir, eğitim sonunda sertifika kazanabilir ve blog gönderileri paylaşarak platformda seviye atlayabilirler.
+
+## 📌 Proje Amacı
+
+- Veritabanı tasarımı prensiplerini uygulamak
+- PostgreSQL sorgularıyla pratik yapmak
+- Gerçek bir senaryo üzerinden ilişkilendirilmiş veritabanı yapıları kurmak
+
+## 🛠 Kullanılan Teknolojiler
+
+- PostgreSQL
+- SQL
+- pgAdmin / DBeaver (isteğe bağlı görselleştirme için)
+
+## 📋 İçerik
+
+### 📁 Tablolar
+
+| Tablo Adı              | Açıklama |
+|------------------------|----------|
+| `members`              | Üye bilgilerini içerir |
+| `courses`              | Eğitim bilgilerini içerir |
+| `categories`           | Eğitim kategorilerini içerir |
+| `enrollments`          | Üyelerin eğitimlere katılımını içerir |
+| `certificates`         | Sertifika bilgilerini içerir |
+| `certificate_assignments` | Üyelere atanan sertifikaları içerir |
+| `blog_posts`           | Üyelerin blog gönderilerini içerir |
+
+### 🔗 Tablolar Arası İlişkiler
+
+![Image Alt](https://github.com/aysekarapinar/DataScienceBootcampSQL/blob/1b4bf568bfd0d52f6c3862f655ef843edd136695/Untitled.png)
+
+- Bir üye birden fazla eğitime katılabilir (`members` ↔ `courses` → `enrollments`)
+- Her kurs bir kategoriye aittir (`courses.category_id` → `categories.id`)
+- Bir kullanıcı birden fazla sertifika alabilir (`certificate_assignments`)
+- Blog gönderileri üyeler tarafından yazılır (`blog_posts.member_id` → `members.id`)
+
+## 💾 Kurulum
+
+1. PostgreSQL yüklü değilse [PostgreSQL](https://www.postgresql.org/download/) yükleyin.
+2. `egitim_platformu.sql` dosyasını bir metin editöründe açın ya da doğrudan `psql` komut satırına yükleyin:
+   ```bash
+   psql -U kullanıcı_adı -d veritabani_adi -f egitim_platformu.sql
